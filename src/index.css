@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Quicksand:wght@500;700&family=Roboto:wght@300;400;500&family=Rubik:ital,wght@0,300;0,400;0,500;1,500&family=Ubuntu:wght@300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    box-sizing: border-box;
+    /* border: 1px solid black; */
+}
+
+body { 
+    font-family: 'Rubik', sans-serif;
+}
+
+.header-height{
+    height: 90px;
+}
+
+.sidebar-color{
+    background-color: #2e2e2e;
+}
+
+.hh-70{
+    height: 120px;
+}
+
+.ww-200{
+    width: 200px;
+}
+
+.room-card{
+    width: 31.5%;
+}
+
+.box-shadow{
+    box-shadow: 0px 0px 3px rgb(158, 158, 158);
+    border-radius: 2px;
+}
+
+.active {
+    background-color: rgba(34, 197, 94, 1);
+    border-radius: 9999px;
+    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+    color: white;
+}
+
+.inActive {
+    background-color: rgba(197, 34, 34, 1);
+    border-radius: 9999px;
+    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+    color: white;
+}
+
+.min-width{
+    min-width: 30%;
+}
+
+.none { 
+    display: none;
+}
+
+.sidebar{
+    width: 20%;
+}
+
+.dashboard {
+    width: 80%;
+}
+.about {
+    width: 85%;
+}
+.chart {
+    width: 85%;
+}
+
+.sidebar,
+.dashboard, 
+.about {
+    transition: 0.5s ease; 
+}
+
+.head-2{
+    display: none;
+}
+
+@media screen and (max-width: 1000px){
+    .items{
+        padding-left: 1rem;
+    }
+
+    .sidebar-item {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .sidebar-item p{
+        font-size: medium;
+        padding-right: 20px;
+    }
+}
+
+@media screen and (max-width: 875px){
+    .sidebar-item p{
+        display: none;
+    }
+    
+    .items{
+        padding-left: 2rem;
+    }
+    
+    .head-1{
+        display: none;
+    }
+    .head-2{
+        display: block;
+    }
+}
+
+@media screen and (max-width: 600px){
+    .sidebar-item p{
+        display: none;
+    }
+
+    .items{
+        padding-left: 2rem;
+    }
+
+    .head-1{
+        display: none;
+    }
+    .head-2{
+        display: block;
+    }
+}
+
+@media screen and (max-width: 550px){
+    .items{
+        padding-left: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 400px){
+    .items{
+        padding-left: 1rem;
+    }
+    .sensor-card{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 300px){
+    .items{
+        padding-left: 1rem;
+    }
+}
