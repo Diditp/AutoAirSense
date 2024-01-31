@@ -40,7 +40,7 @@ export default function Dashboard() {
         </header>
         <div className="px-8 py-8">
           <h1 className="mb-4 text-lg text-gray-600 font-normal md:text-2xl ">
-            Hai Admin, Selamat Datang!
+            Hai Admin, Selamat Datang!!!
             <br />
             Tetap Jaga Kesehatan...
           </h1>
