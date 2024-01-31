@@ -41,7 +41,7 @@ export default function Chart() {
           </div>
         </header>
         <div className="px-8 py-8 flex justify-center items-center min-h-screen">
-            <h1 className="text-base sm:text-5xl text-center">UNDER CONSTRUCTION</h1>
+            <h1 className="text-base sm:text-5xl text-center">UNDER CONSTRUCTIONS</h1>
         </div>
       </div>
     </>
