@@ -3,8 +3,10 @@ import RoomStatusCard from "./RoomStatusCard";
 import ToolInformation from "./ToolInformation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import database from "../database/firebase_database";
-import { onValue, ref , update} from "firebase/database";
+  import database from "../database/firebase_database";
+  import { onValue, ref , update} from "firebase/database";
+
+
 
 export default function Dashboard() {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -47,12 +49,12 @@ export default function Dashboard() {
   const writeDataToFirebase = () => {
     // Menggunakan metode push() untuk menambahkan data baru dengan kunci unik
       update(ref(database, 'dataLogger/dataSensor'), {
-          coValue: 1,
-          co2Value: 1,
-          vocValue: 1,
-          pmValue: 1,
-          suhu: 1,
-          kelembapan: 1,
+          // coValue: 1,
+          // co2Value: 1,
+          // vocValue: 1,
+          // pmValue: 1,
+          // suhu: 1,
+          // kelembapan: 1,
           waktuSekarang: currentTime.toLocaleTimeString(),
       });
   };
@@ -62,36 +64,36 @@ export default function Dashboard() {
   // Menggunakan metode on() untuk mendengarkan perubahan pada data di Firebase
   const starCountRef = ref(database, "dataLogger/dataSensor");
   onValue(starCountRef, (snapshot) => {
-      coValue = snapshot.val().coValue;
-      co2Value = snapshot.val().co2Value;
-      vocValue = snapshot.val().vocValue;
-      pmValue = snapshot.val().pmValue;
-      suhu = snapshot.val().kelembapan;
-      kelembapan = snapshot.val().kelembapan;
-    });
+    coValue = snapshot.val().coValue;
+    co2Value = snapshot.val().co2Value;
+    vocValue = snapshot.val().vocValue;
+    pmValue = snapshot.val().pmValue;
+    suhu = snapshot.val().kelembapan;
+    kelembapan = snapshot.val().kelembapan;
+  });
 
     const [airQualityLabel, setAirQualityLabel] = useState("Buruk");
 
-    const determineAirQuality = () => {
-        console.log("Data Sensor:");
-        console.log("PM Value:", pmValue, pmValue < 50);
-        console.log("CO Value:", coValue, coValue < 2);
-        console.log("CO2 Value:", co2Value, co2Value < 600);
-        console.log("VOC Value:", vocValue, vocValue < 2);
-        console.log("Suhu:", suhu, suhu >= 20 && suhu <= 25);
-        console.log("Kelembapan:", kelembapan, kelembapan >= 30 && kelembapan <= 50);
-      if (pmValue < 50 && coValue < 2 && co2Value < 600 && vocValue < 2 && suhu <= 25 && kelembapan <= 50) {
-        setAirQualityLabel("Baik");
-      } else if ((pmValue >= 50 && pmValue <= 100) || (coValue >= 2 && coValue <= 9) || (co2Value >= 600 && co2Value <= 1000) || (vocValue >= 3 && vocValue <= 6) || (suhu < 27 || suhu > 30) || (kelembapan < 30 || kelembapan > 50)) {
-        setAirQualityLabel("Sedang");
-      } else {
-        setAirQualityLabel("Buruk");
-      }
-    };
+  const determineAirQuality = () => {
+    console.log("Data Sensor:");
+    console.log("PM Value:", pmValue, pmValue < 50);
+    console.log("CO Value:", coValue, coValue < 2);
+    console.log("CO2 Value:", co2Value, co2Value < 600);
+    console.log("VOC Value:", vocValue, vocValue < 2);
+    console.log("Suhu:", suhu, suhu >= 20 && suhu <= 25);
+    console.log("Kelembapan:", kelembapan, kelembapan >= 30 && kelembapan <= 50);
+    if (pmValue < 50 && coValue < 2 && co2Value < 600 && vocValue < 2 && suhu <= 25 && kelembapan <= 50) {
+      setAirQualityLabel("Baik");
+    } else if ((pmValue >= 50 && pmValue <= 100) || (coValue >= 2 && coValue <= 9) || (co2Value >= 600 && co2Value <= 1000) || (vocValue >= 3 && vocValue <= 6) || (suhu < 27 || suhu > 30) || (kelembapan < 30 || kelembapan > 50)) {
+      setAirQualityLabel("Sedang");
+    } else {
+      setAirQualityLabel("Buruk");
+    }
+  };
     
-    useEffect(() => {
-      determineAirQuality();
-    }, [pmValue, coValue, co2Value, vocValue, suhu, kelembapan])
+  useEffect(() => {
+    determineAirQuality();
+  }, [pmValue, coValue, co2Value, vocValue, suhu, kelembapan])
 
   return (
     <>

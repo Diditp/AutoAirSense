@@ -1,5 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import LineChartComp from "./LineChart";
+
 
 export default function Chart() {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -40,8 +42,11 @@ export default function Chart() {
             <FontAwesomeIcon icon="right-from-bracket" size="xl" />
           </div>
         </header>
-        <div className="px-8 py-8 flex justify-center items-center min-h-screen">
-            <h1 className="text-base sm:text-5xl text-center">UNDER CONSTRUCTIONS</h1>
+        <div className="px-8 py-8 flex justify-center flex-col items-center min-h-screen">
+          <h1 className="text-base sm:text-5xl text-center">
+            UNDER CONSTRUCTIONS
+          </h1>
+          <LineChartComp/>
         </div>
       </div>
     </>
