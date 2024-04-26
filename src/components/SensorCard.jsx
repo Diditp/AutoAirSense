@@ -2,10 +2,10 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTemperatureHigh, faWind, faTint, faCloud } from '@fortawesome/free-solid-svg-icons';
 
-const SensorCard = ({ type, sensorType, data, description }) => {
+const SensorCard = ({ type, icon, data, description }) => {
 
   const getIconBySensorType = (sensorType) => {
-    switch (sensorType) {
+    switch (icon) {
       case 'temperature':
         return faTemperatureHigh;
       case 'wind':
@@ -23,7 +23,7 @@ const SensorCard = ({ type, sensorType, data, description }) => {
     <div className="bg-white ww-200 mt-5">
       <div className="sensor-card flex items-center mb-1">
         <div className="sm:w-1/2 w-52 hh-70 bg-blue-300 flex justify-center items-center">
-          <FontAwesomeIcon size='xl' icon={getIconBySensorType(sensorType)} color='white'  />
+          <FontAwesomeIcon size='xl' icon={getIconBySensorType(icon)} color='white' />
         </div>
         <div className="sm:w-1/2 w-52 hh-70 bg-gray-200 flex flex-col items-center justify-center">
           <div className="text-2xs font-semibold">{type}</div>

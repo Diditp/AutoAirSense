@@ -1,15 +1,10 @@
-export default function RoomStatusCard({ status, isActive, imgSrc, desc, style }) {
+
+export default function RoomStatusCard({ status, imgSrc, desc }) {
   return (
     <>
       <div className="bg-white box-shadow w-11/12 md:room-card min-width my-5 mr-5">
         <div className="p-5">
-          <h3 className="mb-1">
-            Status :{" "}
-            <span className={style}>
-              {isActive}
-            </span>
-          </h3>
-          <h2 className="font-semibold">{status}</h2>
+          <h2 className="font-semibold "><span className="font-normal text-black">Kualitas udara :</span> {status}</h2>
         </div>
         <img
           src={imgSrc}
@@ -21,7 +16,7 @@ export default function RoomStatusCard({ status, isActive, imgSrc, desc, style }
             {desc}
           </p>
         </div>
-      </div>
+      </div >
     </>
   );
 }

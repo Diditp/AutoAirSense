@@ -5,21 +5,21 @@ export default function About() {
   const [isExpanded, setIsExpanded] = useState(true);
 
   useEffect(() => {
-      const sidebar = document.querySelector('.sidebar');
-      const about = document.querySelector('.about');
+    const sidebar = document.querySelector('.sidebar');
+    const about = document.querySelector('.about');
 
-      // Check if elements are found before trying to modify them
-      if (sidebar && about) {
-          sidebar.style.width = isExpanded ? '0%' : '15%';
-          sidebar.style.display = isExpanded ? 'none' : 'block';
-          about.style.width = isExpanded ? '100%' : '85%';
-      } else {
-          console.error("Elements not found.");
-      }
+    // Check if elements are found before trying to modify them
+    if (sidebar && about) {
+      sidebar.style.width = isExpanded ? '0%' : '15%';
+      sidebar.style.display = isExpanded ? 'none' : 'block';
+      about.style.width = isExpanded ? '100%' : '85%';
+    } else {
+      console.error("Elements not found.");
+    }
   }, [isExpanded]);
 
   const handleWidthClick = () => {
-      setIsExpanded(!isExpanded);
+    setIsExpanded(!isExpanded);
   };
 
   return (
@@ -27,11 +27,11 @@ export default function About() {
       <div className="flex-1 about">
         <header className="flex justify-between header-height p-5 bg-white items-center ">
           <div className="flex items-center">
-              <FontAwesomeIcon className="mr-5" icon="bars" size="lg" onClick={handleWidthClick}/>
-              <h1 className="text-2xl md:text-4xl">About</h1>
+            <FontAwesomeIcon className="mr-5" icon="bars" size="lg" onClick={handleWidthClick} />
+            <h1 className="text-2xl md:text-4xl">About</h1>
           </div>
           <div className="text-center flex items-center">
-          <span className="mr-2 none sm:block">Logout</span>
+            <span className="mr-2 none sm:block">Logout</span>
             <FontAwesomeIcon icon="right-from-bracket" size="xl" />
           </div>
         </header>
@@ -70,11 +70,10 @@ export default function About() {
                 <li>3. Tinggi: `{">"}` 1000 ppm</li>
               </ul>
               <br />
-              <h4 className="font-semibold">Senyawa Organik Volatil (VOC)</h4>
+              <h4 className="font-semibold">Suhu dan Kelembapan</h4>
               <ul>
-                <li>1. Baik: `{"<"}` 0.3 ppm </li>
-                <li>2. Sedang: 0.3-0.5 ppm</li>
-                <li>3. Tinggi: `{">"}` 0.5 ppm</li>
+                <li>1. Suhu : 18 – 26 Celcius </li>
+                <li>2. Kelembaban : 40% - 60%</li>
               </ul>
             </div>
           </div>

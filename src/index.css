@@ -13,6 +13,12 @@ body {
     font-family: 'Rubik', sans-serif;
 }
 
+.status-indicator {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
 .header-height{
     height: 90px;
 }

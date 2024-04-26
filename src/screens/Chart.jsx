@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import LineChartComp from "./LineChart";
+import LineChartComp from "../components/LineChart";
+import * as React from 'react';
+import Switch from '@mui/material/Switch';
 
 
 export default function Chart() {
@@ -43,10 +45,9 @@ export default function Chart() {
           </div>
         </header>
         <div className="px-8 py-8 flex justify-center flex-col items-center min-h-screen">
-          <h1 className="text-base sm:text-5xl text-center">
-            UNDER CONSTRUCTIONS
-          </h1>
-          <LineChartComp/>
+          <LineChartComp />
+          <Switch
+          />
         </div>
       </div>
     </>

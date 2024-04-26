@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from "./components/Sidebar";
-import Dashboard from "./components/Dashboard";
-import Chart from "./components/Chart";
-import About from "./components/About";
+import Dashboard from "./screens/Dashboard";
+import Chart from "./screens/Chart";
+import About from "./screens/About";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 
