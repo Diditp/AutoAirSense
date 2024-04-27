@@ -25,14 +25,10 @@ export default function About() {
   return (
     <>
       <div className="flex-1 about">
-        <header className="flex justify-between header-height p-5 bg-white items-center ">
+        <header className="flex justify-start header-height p-5 bg-white items-center ">
           <div className="flex items-center">
             <FontAwesomeIcon className="mr-5" icon="bars" size="lg" onClick={handleWidthClick} />
             <h1 className="text-2xl md:text-4xl">About</h1>
-          </div>
-          <div className="text-center flex items-center">
-            <span className="mr-2 none sm:block">Logout</span>
-            <FontAwesomeIcon icon="right-from-bracket" size="xl" />
           </div>
         </header>
         <div className="px-8 py-8">

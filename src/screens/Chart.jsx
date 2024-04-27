@@ -29,7 +29,7 @@ export default function Chart() {
   return (
     <>
       <div className="flex-1 chart">
-        <header className="flex justify-between header-height p-5 bg-white items-center ">
+        <header className="flex justify-start header-height p-5 bg-white items-center ">
           <div className="flex items-center">
             <FontAwesomeIcon
               className="mr-5"
@@ -38,10 +38,6 @@ export default function Chart() {
               onClick={handleWidthClick}
             />
             <h1 className="text-2xl md:text-4xltext-4xl">Chart</h1>
-          </div>
-          <div className="text-center flex items-center">
-            <span className="mr-2 none sm:block">Logout</span>
-            <FontAwesomeIcon icon="right-from-bracket" size="xl" />
           </div>
         </header>
         <div className="px-8 py-8 flex justify-center flex-col items-center min-h-screen">

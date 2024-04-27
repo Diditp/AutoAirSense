@@ -17,13 +17,13 @@ const Sidebar = () => {
             to="/"
             className="sidebar-item flex flex-wrap items-center hover:text-gray-300"
           >
-            <FontAwesomeIcon size="lg" icon="home" className="mr-5"/>
+            <FontAwesomeIcon size="lg" icon="home" className="mr-5" />
             <p>Dashboard</p>
           </Link>
         </li>
         <li className="my-7">
           <Link
-            to="/chart"
+            to="/Chart"
             className="sidebar-item flex flex-wrap items-center hover:text-gray-300"
           >
             <FontAwesomeIcon size="lg" icon="chart-simple" className="mr-6" />

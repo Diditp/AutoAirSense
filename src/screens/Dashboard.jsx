@@ -5,12 +5,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import database from "../database/firebase_database";
 import { onValue, ref, update } from 'firebase/database';
-import { Switch } from "@mui/material";
+import { Button, Switch } from "@mui/material";
 
 export default function Dashboard() {
   const [isExpanded, setIsExpanded] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [deviceMode, setDeviceMode] = useState(0);
+
+
+  function logout() {
+    window.location.reload();
+  }
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -184,7 +189,7 @@ export default function Dashboard() {
             />
             <h1 className="text-2xl md:text-4xl">Dashboard</h1>
           </div>
-          <div className="text-center flex items-center">
+          <div color="black" onClick={logout} className="text-center flex items-center cursor-pointer">
             <span className="mr-2 none sm:block">Logout</span>
             <FontAwesomeIcon icon="right-from-bracket" size="xl" />
           </div>
