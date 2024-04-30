@@ -5,13 +5,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import database from "../database/firebase_database";
 import { onValue, ref, update } from 'firebase/database';
-import { Button, Switch } from "@mui/material";
+import { Switch } from "@mui/material";
 
 export default function Dashboard() {
   const [isExpanded, setIsExpanded] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [deviceMode, setDeviceMode] = useState(0);
-
+  const [coValue, setCoValue] = useState(0);
+  const [co2Value, setCo2Value] = useState(0);
+  const [pmValue, setPmValue] = useState(0);
+  const [temperature, setTemperature] = useState(0);
+  const [humidity, setHumidity] = useState(0);
+  const [exhaustStatus, setExhaustStatus] = useState('Hidup');
+  const [roomStatus, setRoomStatus] = useState('Baik');
+  const [airQualityColor, setAirQualityColor] = useState('green');
+  const [deviceStatus, setDeviceStatus] = useState('Online');
 
   function logout() {
     window.location.reload();
@@ -21,7 +29,6 @@ export default function Dashboard() {
     const intervalId = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
-
     return () => clearInterval(intervalId);
   }, []);
 
@@ -29,7 +36,6 @@ export default function Dashboard() {
     const sidebar = document.querySelector(".sidebar");
     const dashboard = document.querySelector(".dashboard");
 
-    // Check if elements are found before trying to modify them
     if (sidebar && dashboard) {
       sidebar.style.width = isExpanded ? "0%" : "15%";
       sidebar.style.display = isExpanded ? "none" : "block";
@@ -43,99 +49,91 @@ export default function Dashboard() {
     setIsExpanded(!isExpanded);
   };
 
-  let coValue = null;
-  let co2Value = null;
-  let vocValue = null;
-  let pmValue = null;
-  let suhu = null;
-  let kelembapan = null;
-  let exaushtStatus = null;
-
   const writeDataToFirebase = () => {
-    //Menggunakan metode push() untuk menambahkan data baru dengan kunci unik
-    update(ref(database, 'dataLogger/dataSensor'), {
-      coValue: 1,
-      co2Value: 1,
-      vocValue: 1,
-      pmValue: 1,
-      suhu: 1,
-      kelembapan: 1,
+    const dataSensor = {
+      coValue,
+      co2Value,
+      pmValue,
+      suhu: temperature,
+      kelembapan: humidity,
       waktuSekarang: currentTime.toLocaleTimeString(),
-      // mode: deviceMode
-    });
+    };
+    const dataLogger = {
+      exhaustStatus: exhaustStatus,
+      mode: deviceMode
+    }
+    update(ref(database, 'dataLogger'), dataLogger);
+    update(ref(database, 'dataLogger/dataSensor'), dataSensor);
   };
 
   writeDataToFirebase();
 
-  // Menggunakan metode on() untuk mendengarkan perubahan pada data di Firebase
-  const starCountRef = ref(database, "dataLogger/dataSensor");
-  onValue(starCountRef, (snapshot) => {
-    coValue = snapshot.val().coValue;
-    co2Value = snapshot.val().co2Value;
-    vocValue = snapshot.val().vocValue;
-    pmValue = snapshot.val().pmValue;
-    suhu = snapshot.val().kelembapan;
-    kelembapan = snapshot.val().kelembapan;
-    // exaushtStatus = snapshot.val().exaushtStatus;
-  });
-
-  const [airQualityLabel, setAirQualityLabel] = useState("Buruk");
-  const [airQualityColor, setAirQualityColor] = useState("green");
-
-  const determineAirQuality = () => {
-    console.log("Data Sensor:");
-    console.log("PM Value:", pmValue, pmValue < 50);
-    console.log("CO Value:", coValue, coValue < 2);
-    console.log("CO2 Value:", co2Value, co2Value < 600);
-    console.log("VOC Value:", vocValue, vocValue < 2);
-    console.log("Suhu:", suhu, suhu >= 20 && suhu <= 25);
-    console.log("Kelembapan:", kelembapan, kelembapan >= 30 && kelembapan <= 50);
-    if (pmValue < 50 && coValue < 2 && co2Value < 600 && vocValue < 2 && suhu <= 25 && kelembapan <= 50) {
-      setAirQualityLabel("Baik");
-      setAirQualityColor('green');
-    } else if ((pmValue >= 50 && pmValue <= 100) || (coValue >= 2 && coValue <= 9) || (co2Value >= 600 && co2Value <= 1000) || (vocValue >= 3 && vocValue <= 6) || (suhu < 27 || suhu > 30) || (kelembapan < 30 || kelembapan > 50)) {
-      setAirQualityLabel("Sedang");
-      setAirQualityColor('yellow');
-    } else {
-      setAirQualityLabel("Buruk");
-      setAirQualityColor('red');
-    }
-  };
+  useEffect(() => {
+    const colorMap = {
+      "Baik": "green",
+      "Sedang": "yellow",
+      "Buruk": "red"
+    };
+    setAirQualityColor(colorMap[roomStatus]);
+  }, [roomStatus]);
 
   useEffect(() => {
-    determineAirQuality();
-  }, [pmValue, coValue, co2Value, vocValue, suhu, kelembapan])
+    const dataSensor = ref(database, "dataLogger/dataSensor");
+    const dataLogger = ref(database, "dataLogger");
+    onValue(dataSensor, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setCoValue(data.coValue);
+        setCo2Value(data.co2Value);
+        setPmValue(data.pmValue);
+        setTemperature(data.suhu);
+        setHumidity(data.kelembapan);
+      }
+    });
+    onValue(dataLogger, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setExhaustStatus(data.exhaustStatus);
+        setRoomStatus(data.roomStatus);
+        setDeviceStatus(data.deviceStatus);
+      }
+    });
+  }, []);
+
+  const modeOnSwitch = () => {
+    setDeviceMode(prevMode => (prevMode === 0 ? 1 : 0));
+  };
 
   const sensorData = [
     {
       type: "Debu",
       icon: "dust",
-      data: pmValue + " µg/m³",
-      description: "Sensor PM2.5 - Memantau debu halus didalam ruangan ini."
+      data: `${pmValue} µg/m³`,
+      description: "Sensor PM2.5 - Memantau debu halus di dalam ruangan ini."
     },
     {
       type: "CO",
       icon: "wind",
-      data: coValue + " PPM",
-      description: "Sensor MQ-7 - Mengukur kadar gar CO didalam ruangan ini."
+      data: `${coValue} PPM`,
+      description: "Sensor MQ-7 - Mengukur kadar gas CO di dalam ruangan ini."
     },
     {
       type: "CO2",
       icon: "wind",
-      data: co2Value + " PPM",
-      description: "Sensor MQ-7 - Mengukur kadar gar CO didalam ruangan ini."
+      data: `${co2Value} PPM`,
+      description: "Sensor MQ-7 - Mengukur kadar gas CO2 di dalam ruangan ini."
     },
     {
       type: "Suhu",
       icon: "temperature",
-      data: suhu + " Celcius",
-      description: "Sensor Dht22 - Mengukur suhu didalam ruangan ini."
+      data: `${temperature} Celcius`,
+      description: "Sensor Dht22 - Mengukur suhu di dalam ruangan ini."
     },
     {
       type: "Kelembapan",
       icon: "humidity",
-      data: kelembapan + " %",
-      description: "Sensor Dht22 - Mengukur kelembapan didalam ruangan ini."
+      data: `${humidity} %`,
+      description: "Sensor Dht22 - Mengukur kelembapan di dalam ruangan ini."
     }
   ];
 
@@ -160,21 +158,15 @@ export default function Dashboard() {
     }
   ];
 
-  const roomStatusCards = roomStatusData.map((roomStatus, index) => (
+  const roomStatusCards = roomStatusData.map((status, index) => (
     <RoomStatusCard
       key={index}
-      status={roomStatus.status}
-      imgSrc={roomStatus.imgSrc}
-      desc={roomStatus.desc}
-      style={roomStatus.style}
+      status={status.status}
+      imgSrc={status.imgSrc}
+      desc={status.desc}
+      style={status.style}
     />
   ));
-
-  function modeOnSwitch() {
-    if (deviceMode == 0) {
-      setDeviceMode(1)
-    } else { setDeviceMode(0) }
-  }
 
   return (
     <>
@@ -204,28 +196,24 @@ export default function Dashboard() {
             <div className="mx-4 my-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-left text-lg font-semibold ">
-                  SENSOR MONITORING
+                  SENSOR MONITORING (<span className="font-medium">{deviceStatus}</span>)
                 </h2>
+                <h2 className="text-left text-lg font-medium">hh/mm/ss: {currentTime.toLocaleTimeString()}</h2>
                 <div className=" flex items-center">
-                  <h3 className="font-medium">Mode ({deviceMode == 0 ? 'Manual' : 'Auto'})</h3>
-                  <Switch onChange={
-                    modeOnSwitch
-                  } />
+                  <h3 className="font-bold">Mode <span className="font-medium">({deviceMode === 0 ? 'Manual' : 'Auto'})</span></h3>
+                  <Switch onChange={modeOnSwitch} />
                 </div>
               </div>
               <div className="flex justify-center gap-5 md:justify-around flex-wrap">
-                {
-                  sensorData.map((data, index) => (
-                    <SensorCard
-                      key={index} // tambahkan key prop jika Anda merencanakan untuk membuat elemen dinamis seperti ini
-                      type={data.type}
-                      icon={data.icon}
-                      data={data.data}
-                      description={data.description}
-                    />
-                  ))
-                }
-
+                {sensorData.map((data, index) => (
+                  <SensorCard
+                    key={index}
+                    type={data.type}
+                    icon={data.icon}
+                    data={data.data}
+                    description={data.description}
+                  />
+                ))}
               </div>
             </div>
             <hr className="my-5 border-t-4 border-gray-200 mx-4" />
@@ -236,8 +224,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-center">
                 <div className="flex-col">
                   <div className="status-indicator" style={{ backgroundColor: airQualityColor }} ></div>
-
-                  <h2 className="text-center mt-4 font-medium text-2xl">{airQualityLabel.toUpperCase()}</h2>
+                  <h2 className="text-center mt-4 font-medium text-2xl">{roomStatus.toUpperCase()}</h2>
                 </div>
               </div>
               <div className="flex flex-col justify-center items-center lg:flex-row lg:items-stretch">
@@ -255,7 +242,7 @@ export default function Dashboard() {
                   imgSrc="udaraBaik.jpg"
                   imgAlt="Exhaust"
                   description="Ini adalah alat pemurnian udara yang bertugas untuk menyedot udara kotor"
-                  status={exaushtStatus}
+                  mode={deviceMode}
                 />
                 <ToolInformation
                   name="Carbon Filter"
