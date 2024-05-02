@@ -194,11 +194,11 @@ export default function Dashboard() {
           </h1>
           <div className="p-4 bg-white box-shadow">
             <div className="mx-4 my-4">
-              <div className="flex items-center justify-between">
+              <div className="dashboard-header flex items-center justify-between">
                 <h2 className="text-left text-lg font-semibold ">
                   SENSOR MONITORING (<span className="font-medium">{deviceStatus}</span>)
                 </h2>
-                <h2 className="text-left text-lg font-medium">hh/mm/ss: {currentTime.toLocaleTimeString()}</h2>
+                <h2 className="text-left text-lg font-medium">Time: {currentTime.toLocaleTimeString()}</h2>
                 <div className=" flex items-center">
                   <h3 className="font-bold">Mode <span className="font-medium">({deviceMode === 0 ? 'Manual' : 'Auto'})</span></h3>
                   <Switch onChange={modeOnSwitch} />

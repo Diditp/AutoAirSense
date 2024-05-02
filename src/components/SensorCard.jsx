@@ -21,11 +21,11 @@ const SensorCard = ({ type, icon, data, description }) => {
 
   return (
     <div className="bg-white ww-200 mt-5">
-      <div className="sensor-card flex items-center mb-1">
-        <div className="sm:w-1/2 w-52 hh-70 bg-blue-300 flex justify-center items-center">
+      <div className="sensor-card flex items-center mb-1 box-shadow">
+        <div className="sm:w-1/2 w-52 hh-70 sensor-card flex justify-center items-center">
           <FontAwesomeIcon size='xl' icon={getIconBySensorType(icon)} color='white' />
         </div>
-        <div className="sm:w-1/2 w-52 hh-70 bg-gray-200 flex flex-col items-center justify-center">
+        <div className="sm:w-1/2 w-52 hh-70 sensor-card-right flex flex-col items-center justify-center">
           <div className="text-2xs font-semibold">{type}</div>
           <div className="text-1xl ">{data}</div>
         </div>

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Sidebar = () => {
   return (
     <div className="sidebar sidebar-color min-h-screen text-white ">
-      <header className="flex p-4 header-height justify-center items-center bg-blue-400">
+      <header className="flex p-4 header-height justify-center items-center sidebar-header">
         <Link to="/">
           <h1 className="head-1 text-lg font-semibold lg:text-1xl">AUTOAIRSENSE</h1>
           <h1 className="head-2 text-lg font-semibold sm:text-2xl">AAR</h1>

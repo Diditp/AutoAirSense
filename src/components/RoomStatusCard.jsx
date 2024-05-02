@@ -11,7 +11,7 @@ export default function RoomStatusCard({ status, imgSrc, desc }) {
           alt="Kualitas Udara Baik"
           className="bg-cover w-full"
         />
-        <div className="p-3 min-h-fit sm:p-5 bg-slate-200 md:bg-white flex justify-end">
+        <div className="p-3 min-h-fit sm:p-5 room-content md:room-content flex justify-end">
           <p className="text-justify md:text-center text-sm md:text-base">
             {desc}
           </p>

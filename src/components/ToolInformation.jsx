@@ -31,7 +31,7 @@ export default function ({ imgSrc, name, description, imgAlt, mode }) {
     <>
       <div className="bg-white box-shadow w-11/12 md:room-card min-width my-5 mr-5">
         <img className="bg-cover w-full h-64 md:h-1/2" src={imgSrc} alt={imgAlt} />
-        <div className="flex items-center justify-between h-20 w-full p-2 bg-blue-200">
+        <div className="flex items-center justify-between h-20 w-full p-2 tool-middle">
           <div className="flex-col">
             <h4 className="font-medium">{name.toUpperCase()}</h4>
             {name === 'Exhaust Fan' ? <h2>Status: {exhaustStatus == 'Hidup' ? 'Mati' : 'Hidup'}</h2> : null}
@@ -45,7 +45,7 @@ export default function ({ imgSrc, name, description, imgAlt, mode }) {
           ) : null}
 
         </div>
-        <div className="p-3 min-h-fit sm:p-5 bg-slate-200 md:bg-white flex justify-end">
+        <div className="p-3 min-h-fit sm:p-5 tool-footer md:tool-footer flex justify-end">
           <p className="text-justify md:text-center text-sm md:text-base">
             {description}
           </p>
