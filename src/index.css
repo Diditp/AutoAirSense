@@ -189,13 +189,13 @@ body {
         max-width: 20%;
     }
     .dashboard {
-        max-width: 80%;
+        width: 85%;
     }
     .chart {
-        max-width: 80%;
+        width: 85%;
     }
     .about{
-        max-width: 80%;
+        width: 85%;
     }
     .tool-middle{
         display: flex;
