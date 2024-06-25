@@ -32,10 +32,19 @@ const Sidebar = () => {
         </li>
         <li className="my-7">
           <Link
+            to="/Log"
+            className="sidebar-item flex flex-wrap items-center hover:text-gray-300"
+          >
+            <FontAwesomeIcon size="lg" icon="clock" className="mr-6" />
+            <p>Log</p>
+          </Link>
+        </li>
+        <li className="my-7">
+          <Link
             to="/About"
             className="sidebar-item flex flex-wrap items-center hover:text-gray-300"
           >
-            <FontAwesomeIcon size="lg" icon="clock" className="mr-5" />
+            <FontAwesomeIcon size="lg" icon="contact-book" className="mr-5" />
             <p>About</p>
           </Link>
         </li>

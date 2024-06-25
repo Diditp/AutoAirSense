@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import database from "../database/firebase_database";
+import {realtime, firestore} from "../database/firebase_database";
 import { onValue, ref } from "firebase/database";
 import {
   LineChart,
@@ -18,7 +18,7 @@ export default function LineChartComp() {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const starCountRef = ref(database, "dataLogger/dataSensor");
+    const starCountRef = ref(realtime, "dataLogger/dataSensor");
 
     const fetchData = () => {
       setTimeout(() => {

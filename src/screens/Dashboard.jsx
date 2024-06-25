@@ -3,7 +3,8 @@ import RoomStatusCard from "../components/RoomStatusCard";
 import ToolInformation from "../components/ToolInformation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import database from "../database/firebase_database";
+import { realtime, firestore } from '../database/firebase_database';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { onValue, ref, update } from 'firebase/database';
 import { Switch } from "@mui/material";
 
@@ -51,19 +52,14 @@ export default function Dashboard() {
 
   const writeDataToFirebase = () => {
     const dataSensor = {
-      coValue,
-      co2Value,
-      pmValue,
-      suhu: temperature,
-      kelembapan: humidity,
       waktuSekarang: currentTime.toLocaleTimeString(),
     };
     const dataLogger = {
       exhaustStatus: exhaustStatus,
       mode: deviceMode
     }
-    update(ref(database, 'dataLogger'), dataLogger);
-    update(ref(database, 'dataLogger/dataSensor'), dataSensor);
+    update(ref(realtime, 'dataLogger'), dataLogger);
+    update(ref(realtime, 'dataLogger/dataSensor'), dataSensor);
   };
 
   writeDataToFirebase();
@@ -78,8 +74,8 @@ export default function Dashboard() {
   }, [roomStatus]);
 
   useEffect(() => {
-    const dataSensor = ref(database, "dataLogger/dataSensor");
-    const dataLogger = ref(database, "dataLogger");
+    const dataSensor = ref(realtime, "dataLogger/dataSensor");
+    const dataLogger = ref(realtime, "dataLogger");
     onValue(dataSensor, (snapshot) => {
       const data = snapshot.val();
       if (data) {
@@ -89,6 +85,19 @@ export default function Dashboard() {
         setTemperature(data.suhu);
         setHumidity(data.kelembapan);
       }
+      // Tambahkan data ke Firestore
+      addDoc(collection(firestore, 'dataSensor'), {
+        coValue: data.coValue,
+        co2Value: data.co2Value,
+        pmValue: data.pmValue,
+        suhu: data.suhu,
+        kelembapan: data.kelembapan,
+        waktuSekarang: new Date()
+      }).then(() => {
+        console.log('Data berhasil ditambahkan ke Firestore');
+      }).catch((error) => {
+        console.error('Error menambahkan data ke Firestore:', error);
+      });
     });
     onValue(dataLogger, (snapshot) => {
       const data = snapshot.val();

@@ -1,6 +1,6 @@
 import { Switch } from "@mui/material";
 import { useState } from "react";
-import database from "../database/firebase_database";
+import { realtime, firestore } from '../database/firebase_database'; // atau path sesuai dengan struktur proyek Anda
 import { ref, update } from 'firebase/database';
 
 export default function ({ imgSrc, name, description, imgAlt, mode }) {
@@ -12,7 +12,7 @@ export default function ({ imgSrc, name, description, imgAlt, mode }) {
       exhaustStatus: exhaustStatus,
       relayState: relayState
     }
-    update(ref(database, 'dataLogger'), dataLogger);
+    update(ref(realtime, 'dataLogger'), dataLogger);
   };
 
   function modeOnSwitch() {
