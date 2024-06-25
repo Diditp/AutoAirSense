@@ -56,7 +56,6 @@ export default function Dashboard() {
       pmValue,
       suhu: temperature,
       kelembapan: humidity,
-      waktuSekarang: currentTime.toLocaleTimeString(),
     };
     const dataLogger = {
       exhaustStatus: exhaustStatus,
@@ -221,7 +220,7 @@ export default function Dashboard() {
               <h2 className="text-left text-lg font-semibold ">
                 ROOM STATUS INFORMATION
               </h2>
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center mt-4">
                 <div className="flex-col">
                   <div className="status-indicator" style={{ backgroundColor: airQualityColor }} ></div>
                   <h2 className="text-center mt-4 font-medium text-2xl">{roomStatus.toUpperCase()}</h2>
@@ -257,6 +256,7 @@ export default function Dashboard() {
                   description="Jenis filter udara mekanis yang bekerja dengan memaksa udara melalui jaring halus yang menjebak partikel berbahaya seperti serbuk sari, bulu hewan peliharaan, tungau debu, dan asap tembakau."
                 />
               </div>
+              <h1>© 2024, Created by I Made Gede Uditayana Kusuma Putra</h1>
             </div>
           </div>
         </div>

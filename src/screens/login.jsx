@@ -8,7 +8,6 @@ const Login = () => {
     const [error, setError] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
 
-
     const EMAIL = 'superadmin@aas.com';
     const PASSWORD = 'autoairsense';
 
@@ -27,11 +26,10 @@ const Login = () => {
                 <Main />
             ) : (
                 <div className="flex items-center justify-center h-screen bg-gray-100">
-                    <img src="udaraBaik.jpg" alt="" srcset="" />
-                    <div className="bg-white bg-opacity-50 backdrop-filter backdrop-blur-lg p-8 rounded-lg shadow-lg absolute w-1/3 max h-1/2">
-                        <div className='flex-col justify-center items-center'>
-                            <h2 className="text-2xl font-bold mb-4 text-center">Login To</h2>
-                            <h2 className="text-2xl font-bold mb-4 text-center">AutoAirSense</h2>
+                    <img src="udaraBaik.jpg" alt="" className="absolute inset-0 w-full h-full object-cover z-0" />
+                    <div className="bg-white bg-opacity-50 backdrop-filter backdrop-blur-lg p-8 rounded-lg shadow-lg z-10 max-w-md w-full mx-auto">
+                        <div className='text-center mb-8'>
+                            <h2 className="text-2xl font-bold mb-4">Login To AutoAirSense</h2>
                         </div>
                         {error && <div className="text-red-500 mb-4">{error}</div>}
                         <div className="mb-4">

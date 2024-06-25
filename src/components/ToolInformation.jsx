@@ -1,7 +1,7 @@
 import { Switch } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import database from "../database/firebase_database";
-import { ref, update } from 'firebase/database';
+import { ref, update, onValue } from 'firebase/database';
 
 export default function ({ imgSrc, name, description, imgAlt, mode }) {
   const [relayState, setRelayState] = useState(1);
@@ -9,11 +9,20 @@ export default function ({ imgSrc, name, description, imgAlt, mode }) {
 
   const writeDataToFirebase = () => {
     const dataLogger = {
-      exhaustStatus: exhaustStatus,
       relayState: relayState
     }
     update(ref(database, 'dataLogger'), dataLogger);
   };
+
+  useEffect(() => {
+    const dataLogger = ref(database, "dataLogger");
+    onValue(dataLogger, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setExhaustStatus(data.exhaustStatus);
+      }
+    });
+  }, []);
 
   function modeOnSwitch() {
     if (relayState === 0) {
@@ -34,7 +43,7 @@ export default function ({ imgSrc, name, description, imgAlt, mode }) {
         <div className="flex items-center justify-between h-20 w-full p-2 tool-middle">
           <div className="flex-col">
             <h4 className="font-medium">{name.toUpperCase()}</h4>
-            {name === 'Exhaust Fan' ? <h2>Status: {exhaustStatus == 'Hidup' ? 'Mati' : 'Hidup'}</h2> : null}
+            {name === 'Exhaust Fan' ? <h2>Status: {exhaustStatus}</h2> : null}
           </div>
 
           {name === 'Exhaust Fan' ? (
