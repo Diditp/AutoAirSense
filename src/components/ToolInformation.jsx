@@ -1,7 +1,8 @@
 import { Switch } from "@mui/material";
 import { useState } from "react";
 import { realtime, firestore } from '../database/firebase_database'; // atau path sesuai dengan struktur proyek Anda
-import { ref, update } from 'firebase/database';
+import { onValue, ref, update } from 'firebase/database';
+import { useEffect } from "react";
 
 export default function ({ imgSrc, name, description, imgAlt, mode }) {
   const [relayState, setRelayState] = useState(1);
@@ -15,7 +16,7 @@ export default function ({ imgSrc, name, description, imgAlt, mode }) {
   };
 
   useEffect(() => {
-    const dataLogger = ref(database, "dataLogger");
+    const dataLogger = ref(realtime, "dataLogger");
     onValue(dataLogger, (snapshot) => {
       const data = snapshot.val();
       if (data) {
