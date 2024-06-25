@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import * as React from 'react';
-import database from "../database/firebase_database";
+import { realtime, firestore } from "../database/firebase_database";
 import { onValue, ref } from 'firebase/database';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { Grid, Paper } from '@mui/material'; // Import Grid dan Paper dari MUI
@@ -25,7 +25,7 @@ export default function Chart() {
   }, [isExpanded]);
 
   useEffect(() => {
-    const dataSensor = ref(database, "dataLogger/dataSensor");
+    const dataSensor = ref(realtime, "dataLogger/dataSensor");
     onValue(dataSensor, (snapshot) => {
       const data = snapshot.val();
       if (data) {

@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import Dashboard from "./Dashboard";
 import Chart from "./Chart";
 import About from "./About";
+import Log from "./Log";
 
 
 export default function Main() {
@@ -14,6 +15,7 @@ export default function Main() {
                 <Routes>
                     <Route path="/Chart" element={<Chart />} />
                     <Route path="/About" element={<About />} />
+                    <Route path="/Log" element={<Log />} />
                     <Route path="/" element={<Dashboard />} />
                 </Routes>
             </div>
