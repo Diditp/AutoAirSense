@@ -26,7 +26,7 @@ const Login = () => {
         <Main />
       ) : (
         <div className="relative flex items-center justify-center h-screen bg-gray-100">
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('udaraBaik.jpg')` }}></div>
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('background.jpg')` }}></div>
           <div className="relative bg-white bg-opacity-50 backdrop-filter backdrop-blur-lg p-8 rounded-lg shadow-lg w-1/3 max-w-md">
             <div className='flex flex-col justify-center items-center'>
               <h2 className="text-2xl font-bold mb-4 text-center">Login To</h2>

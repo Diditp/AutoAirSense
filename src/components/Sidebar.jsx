@@ -45,7 +45,7 @@ const Sidebar = () => {
             className="sidebar-item flex flex-wrap items-center hover:text-gray-300"
           >
             <FontAwesomeIcon size="lg" icon="contact-book" className="mr-5" />
-            <p>About</p>
+            <p>More Infomation</p>
           </Link>
         </li>
       </ul>

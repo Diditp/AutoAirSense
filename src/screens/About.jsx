@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import RoomStatusCard from "../components/RoomStatusCard";
 
 export default function About() {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -21,6 +22,37 @@ export default function About() {
   const handleWidthClick = () => {
     setIsExpanded(!isExpanded);
   };
+
+  const roomStatusData = [
+    {
+      status: "Baik (0 - 50)",
+      imgSrc: "good-air.jpg",
+      desc: "Indeks Standar Pencemar Udara (ISPU) adalah suatu metode yang digunakan untuk mengukur kualitas udara dengan memperhitungkan beberapa parameter pencemar udara. Rentang 0-50 pada ISPU menunjukkan kualitas udara yang baik atau bersih di dalam ruangan. Pada rentang ini, konsentrasi pencemar udara berada pada tingkat yang rendah dan tidak memberikan dampak signifikan terhadap kesehatan manusia.",
+      style: "active"
+    },
+    {
+      status: "Sedang (50 - 100)",
+      imgSrc: "medium-air.jpg",
+      desc: "Rentang ISPU antara 50 hingga 100 mengindikasikan bahwa kualitas udara di dalam ruangan berada dalam kategori sedang. Pada rentang ini, konsentrasi beberapa parameter pencemar udara mungkin sudah mulai meningkat, tetapi masih dalam batas yang dapat ditoleransi tanpa memberikan dampak kesehatan yang signifikan pada kebanyakan individu.",
+      style: "active"
+    },
+    {
+      status: "Tidak Sehat (100 - 150)",
+      imgSrc: "bad-air.jpg",
+      desc: "Rentang 100-150 pada ISPU menunjukkan bahwa kualitas udara dalam ruangan berada pada tingkat sedang hingga agak buruk. Pada rentang ini, konsentrasi pencemar udara mungkin mencapai tingkat yang dapat menimbulkan risiko bagi kelompok sensitif atau individu dengan masalah kesehatan tertentu. Langkah-langkah pencegahan dan perhatian ekstra diperlukan untuk menjaga kesehatan penghuni ruangan.",
+      style: "active"
+    }
+  ];
+
+  const roomStatusCards = roomStatusData.map((status, index) => (
+    <RoomStatusCard
+      key={index}
+      status={status.status}
+      imgSrc={status.imgSrc}
+      desc={status.desc}
+      style={status.style}
+    />
+  ));
 
   return (
     <>
@@ -72,6 +104,9 @@ export default function About() {
                 <li>2. Kelembaban : 40% - 60%</li>
               </ul>
             </div>
+            <div className="flex flex-col justify-center items-center lg:flex-row lg:items-stretch">
+                {roomStatusCards}
+              </div>
           </div>
         </div>
       </div>

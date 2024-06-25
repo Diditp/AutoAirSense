@@ -149,19 +149,19 @@ export default function Dashboard() {
   const roomStatusData = [
     {
       status: "Baik (0 - 50)",
-      imgSrc: "udaraBaik.jpg",
+      imgSrc: "good-air.jpg",
       desc: "Indeks Standar Pencemar Udara (ISPU) adalah suatu metode yang digunakan untuk mengukur kualitas udara dengan memperhitungkan beberapa parameter pencemar udara. Rentang 0-50 pada ISPU menunjukkan kualitas udara yang baik atau bersih di dalam ruangan. Pada rentang ini, konsentrasi pencemar udara berada pada tingkat yang rendah dan tidak memberikan dampak signifikan terhadap kesehatan manusia.",
       style: "active"
     },
     {
       status: "Sedang (50 - 100)",
-      imgSrc: "udaraBaik.jpg",
+      imgSrc: "medium-air.jpg",
       desc: "Rentang ISPU antara 50 hingga 100 mengindikasikan bahwa kualitas udara di dalam ruangan berada dalam kategori sedang. Pada rentang ini, konsentrasi beberapa parameter pencemar udara mungkin sudah mulai meningkat, tetapi masih dalam batas yang dapat ditoleransi tanpa memberikan dampak kesehatan yang signifikan pada kebanyakan individu.",
       style: "active"
     },
     {
       status: "Tidak Sehat (100 - 150)",
-      imgSrc: "udaraBaik.jpg",
+      imgSrc: "bad-air.jpg",
       desc: "Rentang 100-150 pada ISPU menunjukkan bahwa kualitas udara dalam ruangan berada pada tingkat sedang hingga agak buruk. Pada rentang ini, konsentrasi pencemar udara mungkin mencapai tingkat yang dapat menimbulkan risiko bagi kelompok sensitif atau individu dengan masalah kesehatan tertentu. Langkah-langkah pencegahan dan perhatian ekstra diperlukan untuk menjaga kesehatan penghuni ruangan.",
       style: "active"
     }
@@ -248,7 +248,7 @@ export default function Dashboard() {
               <div className="flex flex-col justify-center items-center lg:flex-row lg:items-stretch">
                 <ToolInformation
                   name="Exhaust Fan"
-                  imgSrc="udaraBaik.jpg"
+                  imgSrc="exhaust.jpg"
                   imgAlt="Exhaust"
                   description="Ini adalah alat pemurnian udara yang bertugas untuk menyedot udara kotor"
                   mode={deviceMode}
@@ -256,12 +256,12 @@ export default function Dashboard() {
                 <ToolInformation
                   name="Carbon Filter"
                   imgAlt="Carbon Filter"
-                  imgSrc="udaraBaik.jpg"
+                  imgSrc="carbon.jpg"
                   description="Karbon aktif dapat menyerap bau dari udara atau air, sehingga cocok digunakan di toilet, tempat sampah, dan tempat-tempat yang memancarkan bau tidak sedap."
                 />
                 <ToolInformation
                   name="Hepa Filter"
-                  imgSrc="udaraBaik.jpg"
+                  imgSrc="hepa.jpg"
                   imgAlt="Exhaust"
                   description="Jenis filter udara mekanis yang bekerja dengan memaksa udara melalui jaring halus yang menjebak partikel berbahaya seperti serbuk sari, bulu hewan peliharaan, tungau debu, dan asap tembakau."
                 />
