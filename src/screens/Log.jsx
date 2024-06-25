@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { firestore } from '../database/firebase_database'; // atau path sesuai dengan struktur proyek Anda
+import { firestore } from '../database/firebase_database'; // Sesuaikan dengan path struktur proyek Anda
 import { collection, getDocs } from 'firebase/firestore';
 
 export default function Log() {
@@ -14,6 +14,7 @@ export default function Log() {
     const sidebar = document.querySelector(".sidebar");
     const chart = document.querySelector(".chart");
 
+    // Check if elements are found before trying to modify them
     if (sidebar && chart) {
       sidebar.style.width = isExpanded ? "0%" : "15%";
       sidebar.style.display = isExpanded ? "none" : "block";
@@ -31,18 +32,26 @@ export default function Log() {
     const fetchDataFromFirestore = async () => {
       try {
         const dataSensorSnapshot = await getDocs(collection(firestore, 'dataSensor'));
-        const sensorDataList = dataSensorSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          waktuSekarang: doc.data().waktuSekarang.toDate().toLocaleString() // Convert timestamp to string
-        }));
+        const sensorDataMap = new Map(); // Gunakan Map untuk mengelompokkan data berdasarkan waktu unik
 
-        // Sort the data by timestamp in descending order
-        sensorDataList.sort((a, b) => new Date(b.waktuSekarang) - new Date(a.waktuSekarang));
+        dataSensorSnapshot.forEach(doc => {
+          const data = doc.data();
+          const waktuSekarang = data.waktuSekarang.toDate().toLocaleString();
+          if (!sensorDataMap.has(waktuSekarang)) {
+            sensorDataMap.set(waktuSekarang, {
+              id: doc.id,
+              ...data,
+              waktuSekarang: waktuSekarang
+            });
+          }
+        });
 
-        setSensorData(sensorDataList);
+        // Convert Map values ke array dan urutkan berdasarkan waktuSekarang secara descending
+        const sortedSensorData = [...sensorDataMap.values()].sort((a, b) => new Date(b.waktuSekarang) - new Date(a.waktuSekarang));
+
+        setSensorData(sortedSensorData);
       } catch (error) {
-        console.error('Error mengambil data dari Firestore:', error);
+        console.error('Error fetching data from Firestore:', error);
       }
     };
 
