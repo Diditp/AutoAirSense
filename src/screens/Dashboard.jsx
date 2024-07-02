@@ -74,8 +74,22 @@ export default function Dashboard() {
   }, [roomStatus]);
 
   useEffect(() => {
+    // Reference to dataSensor and dataLogger in the database
     const dataSensor = ref(realtime, "dataLogger/dataSensor");
     const dataLogger = ref(realtime, "dataLogger");
+    
+
+     // Listener for dataLogger
+     onValue(dataLogger, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setExhaustStatus(data.exhaustStatus);
+        setRoomStatus(data.roomStatus);
+        setDeviceStatus(data.deviceStatus);
+      }
+    });
+
+    // Listener for dataSensor
     onValue(dataSensor, (snapshot) => {
       const data = snapshot.val();
       if (data) {
@@ -84,30 +98,27 @@ export default function Dashboard() {
         setPmValue(data.pmValue);
         setTemperature(data.suhu);
         setHumidity(data.kelembapan);
-      }
-      // Tambahkan data ke Firestore
-      addDoc(collection(firestore, 'dataSensor'), {
-        coValue: data.coValue,
-        co2Value: data.co2Value,
-        pmValue: data.pmValue,
-        suhu: data.suhu,
-        kelembapan: data.kelembapan,
-        waktuSekarang: new Date()
-      }).then(() => {
-        console.log('Data berhasil ditambahkan ke Firestore');
-      }).catch((error) => {
-        console.error('Error menambahkan data ke Firestore:', error);
-      });
-    });
-    onValue(dataLogger, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setExhaustStatus(data.exhaustStatus);
-        setRoomStatus(data.roomStatus);
-        setDeviceStatus(data.deviceStatus);
+        
+        // Adding data to Firestore with exhaust status
+        addDoc(collection(firestore, 'dataSensor'), {
+          coValue: data.coValue,
+          co2Value: data.co2Value,
+          pmValue: data.pmValue,
+          suhu: data.suhu,
+          kelembapan: data.kelembapan,
+          exhaustStatus: exhaustStatus,  // Use the current exhaust status
+          waktuSekarang: new Date()
+        }).then(() => {
+          console.log('Data berhasil ditambahkan ke Firestore');
+        }).catch((error) => {
+          console.error('Error menambahkan data ke Firestore:', error);
+        });
       }
     });
-  }, []);
+
+   
+  }, [exhaustStatus]);  // Add exhaustStatus as a dependency
+
 
   const modeOnSwitch = () => {
     setDeviceMode(prevMode => (prevMode === 0 ? 1 : 0));
@@ -118,7 +129,7 @@ export default function Dashboard() {
       type: "Debu",
       icon: "dust",
       data: `${pmValue} µg/m³`,
-      description: "Sensor PM2.5 - Memantau debu halus di dalam ruangan ini."
+      description: "Sensor PM10 - Memantau debu halus di dalam ruangan ini."
     },
     {
       type: "CO",
@@ -130,7 +141,7 @@ export default function Dashboard() {
       type: "CO2",
       icon: "wind",
       data: `${co2Value} PPM`,
-      description: "Sensor MQ-7 - Mengukur kadar gas CO2 di dalam ruangan ini."
+      description: "Sensor MQ-135 - Mengukur kadar gas CO2 di dalam ruangan ini."
     },
     {
       type: "Suhu",
