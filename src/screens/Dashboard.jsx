@@ -11,7 +11,7 @@ import { Switch } from "@mui/material";
 export default function Dashboard() {
   const [isExpanded, setIsExpanded] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [deviceMode, setDeviceMode] = useState(0);
+  const [deviceMode, setDeviceMode] = useState(1);
   const [coValue, setCoValue] = useState(0);
   const [co2Value, setCo2Value] = useState(0);
   const [pmValue, setPmValue] = useState(0);
@@ -23,6 +23,7 @@ export default function Dashboard() {
   const [deviceStatus, setDeviceStatus] = useState('Online');
 
   function logout() {
+    // Panggil fungsi ini saat Anda ingin menghapus semua data
     window.location.reload();
   }
 
@@ -50,6 +51,20 @@ export default function Dashboard() {
     setIsExpanded(!isExpanded);
   };
 
+  const deleteAllDocuments = async () => {
+    const sensorCollection = collection(firestore, 'dataSensor');
+    const sensorDocs = await getDocs(sensorCollection);
+
+    if (sensorDocs.size > 0) {
+      const deletePromises = sensorDocs.docs.map(doc => deleteDoc(doc.ref));
+      await Promise.all(deletePromises);
+      console.log('Semua dokumen telah dihapus');
+    } else {
+      console.log('Tidak ada dokumen untuk dihapus');
+    }
+  };
+
+
   const writeDataToFirebase = () => {
     const dataSensor = {
       waktuSekarang: currentTime.toLocaleTimeString(),
@@ -74,8 +89,14 @@ export default function Dashboard() {
   }, [roomStatus]);
 
   useEffect(() => {
+    // Reference to dataSensor and dataLogger in the database
     const dataSensor = ref(realtime, "dataLogger/dataSensor");
     const dataLogger = ref(realtime, "dataLogger");
+
+    // State to store the exhaust status
+    const [exhaustStatus, setExhaustStatus] = useState(null);
+
+    // Listener for dataSensor
     onValue(dataSensor, (snapshot) => {
       const data = snapshot.val();
       if (data) {
@@ -84,21 +105,25 @@ export default function Dashboard() {
         setPmValue(data.pmValue);
         setTemperature(data.suhu);
         setHumidity(data.kelembapan);
+
+        // Adding data to Firestore with exhaust status
+        addDoc(collection(firestore, 'dataSensor'), {
+          coValue: data.coValue,
+          co2Value: data.co2Value,
+          pmValue: data.pmValue,
+          suhu: data.suhu,
+          kelembapan: data.kelembapan,
+          exhaustStatus: exhaustStatus,  // Use the current exhaust status
+          waktuSekarang: new Date()
+        }).then(() => {
+          console.log('Data berhasil ditambahkan ke Firestore');
+        }).catch((error) => {
+          console.error('Error menambahkan data ke Firestore:', error);
+        });
       }
-      // Tambahkan data ke Firestore
-      addDoc(collection(firestore, 'dataSensor'), {
-        coValue: data.coValue,
-        co2Value: data.co2Value,
-        pmValue: data.pmValue,
-        suhu: data.suhu,
-        kelembapan: data.kelembapan,
-        waktuSekarang: new Date()
-      }).then(() => {
-        console.log('Data berhasil ditambahkan ke Firestore');
-      }).catch((error) => {
-        console.error('Error menambahkan data ke Firestore:', error);
-      });
     });
+
+    // Listener for dataLogger
     onValue(dataLogger, (snapshot) => {
       const data = snapshot.val();
       if (data) {
@@ -107,29 +132,33 @@ export default function Dashboard() {
         setDeviceStatus(data.deviceStatus);
       }
     });
-  }, []);
+  }, [exhaustStatus]);  // Add exhaustStatus as a dependency
+
 
   const modeOnSwitch = () => {
     setDeviceMode(prevMode => (prevMode === 0 ? 1 : 0));
+    deleteAllDocuments().catch(error => {
+      console.error('Error menghapus dokumen:', error);
+    });
   };
 
   const sensorData = [
     {
       type: "Debu",
       icon: "dust",
-      data: `${pmValue} µg/m³`,
+      data: `${parseFloat(pmValue).toFixed(0)} µg/m³`,
       description: "Sensor PM2.5 - Memantau debu halus di dalam ruangan ini."
     },
     {
       type: "CO",
       icon: "wind",
-      data: `${coValue} PPM`,
+      data: `${parseFloat(coValue).toFixed(0)} PPM`,
       description: "Sensor MQ-7 - Mengukur kadar gas CO di dalam ruangan ini."
     },
     {
       type: "CO2",
       icon: "wind",
-      data: `${co2Value} PPM`,
+      data: `${parseFloat(co2Value).toFixed(0)} PPM`,
       description: "Sensor MQ-7 - Mengukur kadar gas CO2 di dalam ruangan ini."
     },
     {
