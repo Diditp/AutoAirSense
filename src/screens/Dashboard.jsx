@@ -93,6 +93,16 @@ export default function Dashboard() {
     const dataSensor = ref(realtime, "dataLogger/dataSensor");
     const dataLogger = ref(realtime, "dataLogger");
 
+    // Listener for dataLogger
+    onValue(dataLogger, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setExhaustStatus(data.exhaustStatus);
+        setRoomStatus(data.roomStatus);
+        setDeviceStatus(data.deviceStatus);
+      }
+    });
+
     // Listener for dataSensor
     onValue(dataSensor, (snapshot) => {
       const data = snapshot.val();
@@ -120,15 +130,6 @@ export default function Dashboard() {
       }
     });
 
-    // Listener for dataLogger
-    onValue(dataLogger, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setExhaustStatus(data.exhaustStatus);
-        setRoomStatus(data.roomStatus);
-        setDeviceStatus(data.deviceStatus);
-      }
-    });
   }, [exhaustStatus]);  // Add exhaustStatus as a dependency
 
 

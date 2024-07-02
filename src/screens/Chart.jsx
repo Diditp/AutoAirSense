@@ -1,71 +1,117 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import * as React from 'react';
-import { realtime, firestore } from "../database/firebase_database";
+import { realtime } from "../database/firebase_database";
 import { onValue, ref } from 'firebase/database';
-import { LineChart } from '@mui/x-charts/LineChart';
-import { Grid, Paper } from '@mui/material'; // Import Grid dan Paper dari MUI
+import Chart from 'react-apexcharts';
+import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
-export default function Chart() {
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [sensorData, setSensorData] = useState({}); // Objek untuk menyimpan data dari semua sensor
-
-  useEffect(() => {
-    const sidebar = document.querySelector(".sidebar");
-    const chart = document.querySelector(".chart");
-
-    // Check if elements are found before trying to modify them
-    if (sidebar && chart) {
-      sidebar.style.width = isExpanded ? "0%" : "15%";
-      sidebar.style.display = isExpanded ? "none" : "block";
-      chart.style.width = isExpanded ? "100%" : "85%";
-    } else {
-      console.error("Elements not found.");
-    }
-  }, [isExpanded]);
+export default function SensorCharts() {
+  const [sensorData, setSensorData] = useState({});
+  const [realTimeData, setRealTimeData] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const dataPerPage = 10;
 
   useEffect(() => {
     const dataSensor = ref(realtime, "dataLogger/dataSensor");
     onValue(dataSensor, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        // Memperbarui data untuk setiap sensor
-        Object.keys(data).forEach(sensor => {
-          const newData = {
-            timestamp: Date.now(), // Gunakan waktu aktual
-            value: data[sensor] || 0 // Pastikan ada nilai default jika data tidak ada
+        const newData = {};
+        for (const [key, value] of Object.entries(data)) {
+          newData[key] = {
+            timeStamp: new Date(), // Gunakan waktu saat ini
+            value: value,
           };
-
-          // Simpan data baru untuk setiap sensor
-          setSensorData(prevData => {
-            let newDataArray = [];
-            if (prevData[sensor]?.length === 10) {
-              // Jika sudah ada 10 data, hapus data yang paling lama dan tambahkan data baru ke awal array
-              newDataArray = [newData, ...prevData[sensor].slice(0, -1)];
-            } else {
-              // Jika belum ada 10 data, tambahkan data baru ke awal array data
-              newDataArray = [...(prevData[sensor] || []), newData];
-            }
-            // Kembalikan state dengan data terbaru
-            return {
-              ...prevData,
-              [sensor]: newDataArray
-            };
-          });
-        });
+        }
+        setSensorData(newData);
       }
     });
   }, []);
 
+  useEffect(() => {
+    const dataSensor = ref(realtime, "dataLogger/dataSensor");
+    onValue(dataSensor, async (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const updatedData = { ...realTimeData };
+        for (const [key, value] of Object.entries(data)) {
+          const sensorData = updatedData[key] || [];
+
+          // Determine the current timestamp in milliseconds
+          let currentTimestamp = Date.now();
+
+          // Check if the last entry has the same timestamp
+          if (sensorData.length > 0 && sensorData[sensorData.length - 1].timeStamp === currentTimestamp) {
+            // If the current timestamp is the same, wait for approximately 3 seconds
+            await new Promise(resolve => setTimeout(resolve, 5000)); // 3000 milliseconds = 3 seconds
+            currentTimestamp = Date.now(); // Update timestamp after waiting
+          }
+
+          const latestData = {
+            timeStamp: currentTimestamp, // Gunakan timestamp unik
+            value: value,
+          };
+
+          // Masukkan data terbaru ke dalam array sensorData
+          if (sensorData.length < dataPerPage) {
+            sensorData.push(latestData);
+          } else {
+            sensorData.shift(); // Hapus data pertama jika sudah mencapai batas dataPerPage
+            sensorData.push(latestData);
+          }
+
+          updatedData[key] = sensorData;
+        }
+        setRealTimeData(updatedData);
+      }
+    });
+  }, [sensorData]);
 
   const handleWidthClick = () => {
-    setIsExpanded(!isExpanded);
+    // Implementasi logika untuk menoggle lebar sidebar (opsional untuk contoh ini)
   };
+
+  const getChartOptions = (sensorName) => ({
+    chart: {
+      type: 'line',
+      animations: {
+        enabled: true,
+        easing: 'linear',
+        dynamicAnimation: {
+          speed: 1000
+        }
+      }
+    },
+    xaxis: {
+      categories: realTimeData[sensorName]?.map(data => new Date(data.timeStamp).toLocaleString()) || [],
+    },
+  });
+
+  const getChartSeries = (sensorName) => ([{
+    name: sensorName,
+    data: realTimeData[sensorName]?.map(data => data.value).slice(-dataPerPage) || [],
+  }]);
+
+  // Hitung jumlah halaman
+  const totalPages = Math.ceil(realTimeData[Object.keys(sensorData)[0]]?.length / dataPerPage); // Menggunakan sensorName yang valid, misalnya mengambil kunci pertama
+
+  // Fungsi untuk mengatur halaman
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  // Hitung indeks awal dan akhir dari halaman saat ini
+  const startIndex = (currentPage - 1) * dataPerPage;
+  const endIndex = startIndex + dataPerPage;
 
   return (
     <>
       <div className="flex-1 chart">
-        <header className="flex justify-start header-height p-5 bg-white items-center ">
+        <header className="flex justify-start header-height p-5 bg-white items-center">
           <div className="flex items-center">
             <FontAwesomeIcon
               className="mr-5"
@@ -73,23 +119,47 @@ export default function Chart() {
               size="lg"
               onClick={handleWidthClick}
             />
-            <h1 className="text-2xl md:text-4xltext-4xl">Chart</h1>
+            <h1 className="text-2xl md:text-4xl">Sensor Charts</h1>
           </div>
         </header>
         <div className="px-8 py-8 min-h-screen">
-          <Grid container spacing={2}> {/* Gunakan Grid dari MUI */}
-            {/* Tampilkan grafik untuk data dari setiap sensor */}
-            {Object.keys(sensorData).map((sensor, index) => (
-              <Grid item xs={12} sm={6} md={6} lg={6} key={index}> {/* Atur jumlah kolom untuk setiap ukuran layar */}
-                <Paper elevation={3} className="chart-item p-4"> {/* Gunakan Paper dari MUI dan tambahkan padding */}
-                  <h2 className="text-xl font-bold mb-2">{sensor}</h2> {/* Gunakan ukuran font dan ketebalan dari Tailwind */}
-                  <LineChart
-                    xAxis={[{ data: sensorData[sensor]?.map(data => new Date(data.timestamp).getMinutes()) || [] }]}
-                    series={[{ data: sensorData[sensor]?.map(data => data.value) || [] }]}
-                    autoScale={true}
-                    width={700}
-                    height={500}
+          <Grid container spacing={3}>
+            {Object.keys(sensorData).map((sensorName) => (
+              <Grid item xs={12} key={sensorName}>
+                <Paper elevation={3} style={{ padding: '16px' }}>
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-base font-semibold">{sensorName}</h3>
+                  </div>
+                  <Chart
+                    options={getChartOptions(sensorName)} // Pastikan sensorName dikirimkan ke getChartOptions
+                    series={getChartSeries(sensorName)} // Pastikan sensorName dikirimkan ke getChartSeries
+                    type="line"
+                    height={300}
                   />
+                  <TableContainer component={Paper} style={{ marginTop: '16px' }}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Time</TableCell>
+                          <TableCell>Value</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {realTimeData[sensorName]?.slice(startIndex, endIndex).map((data, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{new Date(data.timeStamp).toLocaleString()}</TableCell>
+                            <TableCell>{data.value}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  {/* Kontrol pagination */}
+                  <div style={{ marginTop: '16px', textAlign: 'center' }}>
+                    <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
+                    <span style={{ margin: '0 10px' }}>Page {currentPage} of {totalPages}</span>
+                    <button onClick={handleNextPage} disabled={currentPage === totalPages}>Next</button>
+                  </div>
                 </Paper>
               </Grid>
             ))}
