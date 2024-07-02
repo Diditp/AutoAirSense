@@ -90,12 +90,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     // Reference to dataSensor and dataLogger in the database
-    // Reference to dataSensor and dataLogger in the database
     const dataSensor = ref(realtime, "dataLogger/dataSensor");
     const dataLogger = ref(realtime, "dataLogger");
-
-    // State to store the exhaust status
-    const [exhaustStatus, setExhaustStatus] = useState(null);
 
     // Listener for dataSensor
     onValue(dataSensor, (snapshot) => {
