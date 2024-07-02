@@ -90,6 +90,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     // Reference to dataSensor and dataLogger in the database
+    // Reference to dataSensor and dataLogger in the database
     const dataSensor = ref(realtime, "dataLogger/dataSensor");
     const dataLogger = ref(realtime, "dataLogger");
 
