@@ -86,19 +86,20 @@ export default function Log() {
         </header>
         <div className="px-8 py-8 flex justify-center flex-col items-center min-h-screen">
           <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Sensor Data Logger ({sensorData.length} item)</h1>
+            <h1 className="text-2xl font-bold mb-4">Data Logger ({sensorData.length} item)</h1>
             <div className="overflow-x-auto">
               {loading ? (
                 <div className="animate-pulse">
                   {Array.from({ length: 10 }).map((_, index) => (
                     <div key={index} className="flex justify-between border-b py-2">
-                      <div className="h-4 bg-gray-300 rounded w-1/12"></div>
-                      <div className="h-4 bg-gray-300 rounded w-1/12"></div>
-                      <div className="h-4 bg-gray-300 rounded w-1/12"></div>
-                      <div className="h-4 bg-gray-300 rounded w-1/12"></div>
-                      <div className="h-4 bg-gray-300 rounded w-1/12"></div>
-                      <div className="h-4 bg-gray-300 rounded w-1/12"></div>
-                      <div className="h-4 bg-gray-300 rounded w-1/6"></div>
+                      <div className="h-10 bg-gray-300 rounded w-1/12"></div>
+                      <div className="h-10 bg-gray-300 rounded w-1/12"></div>
+                      <div className="h-10 bg-gray-300 rounded w-1/12"></div>
+                      <div className="h-10 bg-gray-300 rounded w-1/12"></div>
+                      <div className="h-10 bg-gray-300 rounded w-1/12"></div>
+                      <div className="h-10 bg-gray-300 rounded w-1/12"></div>
+                      <div className="h-10 bg-gray-300 rounded w-1/12"></div>
+                      <div className="h-10 bg-gray-300 rounded w-1/12"></div>
                     </div>
                   ))}
                 </div>
@@ -113,6 +114,7 @@ export default function Log() {
                       <th className="py-2 px-4 border-b text-left">PM Value (µg/m³)</th>
                       <th className="py-2 px-4 border-b text-left">Temperature (°C)</th>
                       <th className="py-2 px-4 border-b text-left">Humidity (%)</th>
+                      <th className="py-2 px-4 border-b text-left">Exhaust</th>
                       
                     </tr>
                   </thead>
@@ -126,6 +128,7 @@ export default function Log() {
                         <td className="py-2 px-4 border-b text-left">{data.pmValue}</td>
                         <td className="py-2 px-4 border-b text-left">{data.suhu}</td>
                         <td className="py-2 px-4 border-b text-left">{data.kelembapan}</td>
+                        <td className="py-2 px-4 border-b text-left">{data.exhaustStatus}</td>
                       </tr>
                     ))}
                   </tbody>

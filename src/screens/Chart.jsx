@@ -89,7 +89,7 @@ export default function SensorCharts() {
 
   const getChartSeries = (sensorName) => ([{
     name: sensorName,
-    data: realTimeData[sensorName]?.map(data => data.value).slice(-dataPerPage) || [],
+    data: realTimeData[sensorName]?.map(data => parseFloat(data.value).toFixed(0)).slice(-dataPerPage) || [],
   }]);
 
   // Hitung jumlah halaman
@@ -148,7 +148,7 @@ export default function SensorCharts() {
                         {realTimeData[sensorName]?.slice(startIndex, endIndex).map((data, index) => (
                           <TableRow key={index}>
                             <TableCell>{new Date(data.timeStamp).toLocaleString()}</TableCell>
-                            <TableCell>{data.value}</TableCell>
+                            <TableCell>{parseFloat(data.value).toFixed(0)}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>

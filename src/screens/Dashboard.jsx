@@ -17,7 +17,7 @@ export default function Dashboard() {
   const [pmValue, setPmValue] = useState(0);
   const [temperature, setTemperature] = useState(0);
   const [humidity, setHumidity] = useState(0);
-  const [exhaustStatus, setExhaustStatus] = useState('Hidup');
+  const [exhaustStatus, setExhaustStatus] = useState('Mati');
   const [roomStatus, setRoomStatus] = useState('Baik');
   const [airQualityColor, setAirQualityColor] = useState('green');
   const [deviceStatus, setDeviceStatus] = useState('Online');

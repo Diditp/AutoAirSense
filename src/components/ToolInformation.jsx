@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 export default function ({ imgSrc, name, description, imgAlt, mode }) {
   const [relayState, setRelayState] = useState(1);
-  const [exhaustStatus, setExhaustStatus] = useState('Hidup'); // Atur ke 'Hidup' di awal
+  const [exhaustStatus, setExhaustStatus] = useState(null); // Atur ke 'Hidup' di awal
 
   const writeDataToFirebase = () => {
     const dataLogger = {
